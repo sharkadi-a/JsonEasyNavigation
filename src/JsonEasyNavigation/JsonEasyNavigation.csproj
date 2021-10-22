@@ -5,4 +5,12 @@
         <RootNamespace>System.Text.Json</RootNamespace>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>bin\Debug\JsonEasyNavigation.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationFile>bin\Release\JsonEasyNavigation.xml</DocumentationFile>
+    </PropertyGroup>
+
 </Project>
