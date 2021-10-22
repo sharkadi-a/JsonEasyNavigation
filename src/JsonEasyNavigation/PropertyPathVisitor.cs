@@ -2,13 +2,13 @@
 {
     internal static class PropertyPathVisitor
     {
-        public static NavigationElement Visit(JsonElement jsonElement, ArraySegment<string> properties)
+        public static JsonNavigationElement Visit(JsonElement jsonElement, ArraySegment<string> properties)
         {
             while (true)
             {
                 if (properties.Count < 1)
                 {
-                    return new NavigationElement(jsonElement, false);
+                    return new JsonNavigationElement(jsonElement, false);
                 }
                 
                 var property = properties[0];

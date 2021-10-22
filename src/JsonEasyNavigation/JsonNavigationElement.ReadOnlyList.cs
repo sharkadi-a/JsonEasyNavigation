@@ -4,27 +4,28 @@ using System.Linq;
 
 namespace System.Text.Json
 {
-    public readonly partial struct NavigationElement : IReadOnlyList<NavigationElement>
+    public readonly partial struct JsonNavigationElement : IReadOnlyList<JsonNavigationElement>
     {
-        public NavigationElement this[string property] =>
-            JsonElement.TryGetProperty(property, out var p) ? new NavigationElement(p, _isStablePropertyOrder) : default;
-
-        public NavigationElement this[int index]
+        public JsonNavigationElement this[int index]
         {
             get
             {
                 if (JsonElement.ValueKind == JsonValueKind.Array)
                 {
                     var len = JsonElement.GetArrayLength();
-                    return index < len ? new NavigationElement(JsonElement[index], _isStablePropertyOrder) : default;
+                    return index < len ? new JsonNavigationElement(JsonElement[index], index, IsStablePropertyOrder) : default;
                 }
 
                 if (JsonElement.ValueKind == JsonValueKind.Object)
                 {
                     var c = 0;
-                    foreach (var property in JsonElement.EnumerateObject())
+                    IEnumerable<JsonProperty> enumerator = IsStablePropertyOrder
+                        ? JsonElement.EnumerateObject().OrderBy(x => x.Name)
+                        : JsonElement.EnumerateObject();
+                    
+                    foreach (var property in enumerator)
                     {
-                        if (c == index) return new NavigationElement(property.Value, _isStablePropertyOrder);
+                        if (c == index) return new JsonNavigationElement(property.Value, property.Name, c, IsStablePropertyOrder);
                         c++;
                     }
                 }
@@ -33,7 +34,7 @@ namespace System.Text.Json
             }
         }
         
-        public IEnumerator<NavigationElement> GetEnumerator()
+        public IEnumerator<JsonNavigationElement> GetEnumerator()
         {
             if (JsonElement.ValueKind == JsonValueKind.Array)
             {
@@ -42,10 +43,10 @@ namespace System.Text.Json
 
             if (JsonElement.ValueKind == JsonValueKind.Object)
             {
-                return new ObjectEnumeratorWrapper(JsonElement, _isStablePropertyOrder);
+                return new ObjectEnumeratorWrapper(JsonElement, IsStablePropertyOrder);
             }
 
-            return Enumerable.Empty<NavigationElement>().GetEnumerator();
+            return Enumerable.Empty<JsonNavigationElement>().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

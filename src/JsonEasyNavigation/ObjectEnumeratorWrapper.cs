@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace System.Text.Json
 {
-    internal class ObjectEnumeratorWrapper : IEnumerator<NavigationElement>, IEnumerator<KeyValuePair<string, NavigationElement>>
+    internal class ObjectEnumeratorWrapper : IEnumerator<JsonNavigationElement>, IEnumerator<KeyValuePair<string, JsonNavigationElement>>
     {
         private IEnumerator<JsonProperty> _enumerator;
 
@@ -27,10 +27,10 @@ namespace System.Text.Json
             _enumerator.Reset();
         }
 
-        KeyValuePair<string, NavigationElement> IEnumerator<KeyValuePair<string, NavigationElement>>.Current =>
+        KeyValuePair<string, JsonNavigationElement> IEnumerator<KeyValuePair<string, JsonNavigationElement>>.Current =>
             new(_enumerator.Current.Name, Current);
 
-        public NavigationElement Current => _enumerator.Current.Value.ToNavigation();
+        public JsonNavigationElement Current => _enumerator.Current.Value.ToNavigation();
 
         object IEnumerator.Current => Current;
 

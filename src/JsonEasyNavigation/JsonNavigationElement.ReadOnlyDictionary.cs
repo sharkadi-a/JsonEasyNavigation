@@ -3,8 +3,11 @@ using System.Linq;
 
 namespace System.Text.Json
 {
-    public readonly partial struct NavigationElement : IReadOnlyDictionary<string, NavigationElement>
+    public readonly partial struct JsonNavigationElement : IReadOnlyDictionary<string, JsonNavigationElement>
     {
+        public JsonNavigationElement this[string property] =>
+            JsonElement.TryGetProperty(property, out var p) ? new JsonNavigationElement(p, property, IsStablePropertyOrder) : default;
+
         public int Count
         {
             get
@@ -23,12 +26,12 @@ namespace System.Text.Json
             }
         }
 
-        IEnumerator<KeyValuePair<string, NavigationElement>> IEnumerable<KeyValuePair<string, NavigationElement>>.GetEnumerator()
+        IEnumerator<KeyValuePair<string, JsonNavigationElement>> IEnumerable<KeyValuePair<string, JsonNavigationElement>>.GetEnumerator()
         {
             if (JsonElement.ValueKind != JsonValueKind.Object)
-                return Enumerable.Empty<KeyValuePair<string, NavigationElement>>().GetEnumerator();
+                return Enumerable.Empty<KeyValuePair<string, JsonNavigationElement>>().GetEnumerator();
 
-            return new ObjectEnumeratorWrapper(JsonElement, _isStablePropertyOrder);
+            return new ObjectEnumeratorWrapper(JsonElement, IsStablePropertyOrder);
         }
 
         public bool ContainsKey(string key)
@@ -36,7 +39,7 @@ namespace System.Text.Json
             return this[key].Exist;
         }
 
-        public bool TryGetValue(string key, out NavigationElement value)
+        public bool TryGetValue(string key, out JsonNavigationElement value)
         {
             value = this[key];
             return value.Exist;
@@ -44,23 +47,23 @@ namespace System.Text.Json
 
         public IEnumerable<string> Keys => JsonElement.EnumerateObject().Select(x => x.Name);
 
-        public IEnumerable<NavigationElement> Values
+        public IEnumerable<JsonNavigationElement> Values
         {
             get
             {
-                var isStable = _isStablePropertyOrder;
+                var isStable = IsStablePropertyOrder;
                 
                 if (JsonElement.ValueKind == JsonValueKind.Array)
                 {
-                    return JsonElement.EnumerateArray().Select(x => new NavigationElement(x, isStable));
+                    return JsonElement.EnumerateArray().Select(x => new JsonNavigationElement(x, isStable));
                 }
 
                 if (JsonElement.ValueKind == JsonValueKind.Object)
                 {
-                    return JsonElement.EnumerateObject().Select(x => new NavigationElement(x.Value, isStable));
+                    return JsonElement.EnumerateObject().Select(x => new JsonNavigationElement(x.Value, isStable));
                 }
                 
-                return Enumerable.Empty<NavigationElement>();
+                return Enumerable.Empty<JsonNavigationElement>();
             }
         }
     }

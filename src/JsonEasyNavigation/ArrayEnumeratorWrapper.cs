@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace System.Text.Json
 {
-    internal class ArrayEnumeratorWrapper : IEnumerator<NavigationElement>
+    internal class ArrayEnumeratorWrapper : IEnumerator<JsonNavigationElement>
     {
         private JsonElement.ArrayEnumerator _enumerator;
         
@@ -24,7 +24,7 @@ namespace System.Text.Json
             _enumerator.Reset();
         }
 
-        public NavigationElement Current => _enumerator.Current.ToNavigation();
+        public JsonNavigationElement Current => _enumerator.Current.ToNavigation();
 
         object IEnumerator.Current => Current;
 
