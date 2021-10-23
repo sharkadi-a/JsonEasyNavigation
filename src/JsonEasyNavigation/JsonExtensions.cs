@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
-namespace System.Text.Json
+namespace JsonEasyNavigation
 {
     /// <summary>
     /// Various <see cref="JsonDocument"/>, <see cref="JsonElement"/> and <see cref="JsonNavigationElement"/> extensions

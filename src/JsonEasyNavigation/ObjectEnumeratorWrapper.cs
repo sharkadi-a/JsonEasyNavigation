@@ -1,12 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
-namespace System.Text.Json
+namespace JsonEasyNavigation
 {
-    internal class ObjectEnumeratorWrapper : IEnumerator<JsonNavigationElement>, IEnumerator<KeyValuePair<string, JsonNavigationElement>>
+    internal readonly struct ObjectEnumeratorWrapper : IEnumerator<JsonNavigationElement>, IEnumerator<KeyValuePair<string, JsonNavigationElement>>
     {
-        private IEnumerator<JsonProperty> _enumerator;
+        private readonly IEnumerator<JsonProperty> _enumerator;
 
         public ObjectEnumeratorWrapper(JsonElement jsonElement, bool stable)
         {
@@ -15,6 +17,11 @@ namespace System.Text.Json
             
             var enumerator = jsonElement.EnumerateObject();
             _enumerator = stable ? enumerator.OrderBy(x => x.Name).GetEnumerator() : enumerator;
+        }
+
+        public ObjectEnumeratorWrapper(IEnumerable<JsonProperty> jsonProperties)
+        {
+            _enumerator = jsonProperties.GetEnumerator();
         }
         
         public bool MoveNext()

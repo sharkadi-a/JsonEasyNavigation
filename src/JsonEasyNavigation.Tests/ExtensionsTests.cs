@@ -43,19 +43,6 @@ namespace JsonEasyNavigation.Tests
         }
 
         [Fact]
-        public void WithStablePropertyOrder_ShouldBeSorted()
-        {
-            var json = @"{ ""item3"": 3, ""item1"": 1, ""item4"": 4}";
-            
-            var jsonDocument = JsonDocument.Parse(json);
-            var nav = jsonDocument.ToNavigation().WithStablePropertyOrder()[0];
-            
-            nav.Exist.ShouldBeTrue();
-            nav.HasName.ShouldBeTrue();
-            nav.Name.ShouldBe("item1");
-        }
-
-        [Fact]
         public void SelectFromManyJsonSources_SumShouldBeCorrect()
         {
             var json1 = @"{ ""item3"": 3, ""item1"": 10, ""item4"": 4}";

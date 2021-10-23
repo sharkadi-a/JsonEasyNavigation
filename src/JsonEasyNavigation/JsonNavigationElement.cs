@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 
-namespace System.Text.Json
+namespace JsonEasyNavigation
 {
     /// <summary>
     /// Represents a wrapper around <see cref="JsonElement"/>, which allows to navigate it's
@@ -16,8 +18,8 @@ namespace System.Text.Json
         internal bool CachedProperties => _properties != default;
         
         /// <summary>
-        /// Does <see cref="JsonElement"/> exists in JSON structure? This allows to check if JSON element being searched exist
-        /// or not.
+        /// Does <see cref="JsonElement"/> exists in JSON structure? This allows to check if JSON element being
+        /// searched exist or not.
         /// </summary>
         /// <example>
         /// Say, there is JSON document:<br/>
@@ -39,28 +41,28 @@ namespace System.Text.Json
         public bool Exist { get; }
         
         /// <summary>
-        /// Returns true, if <see cref="JsonElement"/> has a name (i.e. being a property).
+        /// Returns true, if the <see cref="JsonElement"/> has a name (i.e. being a property).
         /// </summary>
         public bool HasName { get; }
         
         /// <summary>
-        /// The name of <see cref="JsonElement"/>.
+        /// The name of the <see cref="JsonElement"/>.
         /// </summary>
         public string Name { get; }
         
         /// <summary>
-        /// Returns true, if <see cref="JsonElement"/> has an index in array (i.e. being an array item).
+        /// Returns true, if the <see cref="JsonElement"/> has an index in array (i.e. being an array item).
         /// </summary>
         public bool HasIndex { get; }
         
         /// <summary>
-        /// Return index of <see cref="JsonElement"/> in a array OR index of a property in a object. Not all properties have index,
+        /// Return index of the <see cref="JsonElement"/> in a array OR index of a property in a object. Not all properties have index,
         /// ONLY those, which were accessed via the int indexer.
         /// </summary>
         public int Index { get; }
 
         /// <summary>
-        /// Returns true if <see cref="JsonElement"/> can be enumerated as an array or an object.
+        /// Returns true if the <see cref="JsonElement"/> can be enumerated as an array or an object.
         /// </summary>
         public bool IsEnumerable => JsonElement.ValueKind is JsonValueKind.Array or JsonValueKind.Object;
         
@@ -94,7 +96,7 @@ namespace System.Text.Json
             HasIndex = true;
         }
         
-        internal JsonNavigationElement(JsonElement jsonElement, bool isStablePropertyOrder, bool precacheProperties)
+        internal JsonNavigationElement(JsonElement jsonElement, bool isStablePropertyOrder, bool cacheProperties)
         {
             IsStablePropertyOrder = isStablePropertyOrder;
             JsonElement = jsonElement;
@@ -104,14 +106,10 @@ namespace System.Text.Json
             HasIndex = false;
             HasName = false;
 
-            _properties = precacheProperties
-                ? new Lazy<JsonProperty[]>(() =>
-                {
-                    IEnumerable<JsonProperty> elements = isStablePropertyOrder
-                        ? jsonElement.EnumerateObject().OrderBy(x => x.Name)
-                        : jsonElement.EnumerateObject();
-                    return elements.ToArray();
-                }, LazyThreadSafetyMode.ExecutionAndPublication)
+            _properties = cacheProperties
+                ? new Lazy<JsonProperty[]>(() => isStablePropertyOrder
+                    ? jsonElement.EnumerateObject().OrderBy(x => x.Name).ToArray()
+                    : jsonElement.EnumerateObject().ToArray(), LazyThreadSafetyMode.ExecutionAndPublication)
                 : default;
         }
 
@@ -128,16 +126,19 @@ namespace System.Text.Json
 
         public int GetInt32OrDefault()
         {
+            if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetInt32(out var value) ? value : default;
         }        
         
         public long GetInt64OrDefault()
         {
+            if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetInt64(out var value) ? value : default;
         }        
         
         public short GetInt16OrDefault()
         {
+            if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetInt16(out var value) ? value : default;
         }
 

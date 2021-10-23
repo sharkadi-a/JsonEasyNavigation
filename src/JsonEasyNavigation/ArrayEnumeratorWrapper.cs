@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Text.Json;
 
-namespace System.Text.Json
+namespace JsonEasyNavigation
 {
-    internal class ArrayEnumeratorWrapper : IEnumerator<JsonNavigationElement>
+    internal readonly struct ArrayEnumeratorWrapper : IEnumerator<JsonNavigationElement>
     {
-        private JsonElement.ArrayEnumerator _enumerator;
+        private readonly JsonElement.ArrayEnumerator _enumerator;
         
         public ArrayEnumeratorWrapper(JsonElement jsonElement)
         {

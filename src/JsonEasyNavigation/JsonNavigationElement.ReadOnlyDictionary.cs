@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
-namespace System.Text.Json
+namespace JsonEasyNavigation
 {
     public readonly partial struct JsonNavigationElement : IReadOnlyDictionary<string, JsonNavigationElement>
     {
@@ -49,12 +50,15 @@ namespace System.Text.Json
             }
         }
 
+        /// <inheritdoc/>
         IEnumerator<KeyValuePair<string, JsonNavigationElement>> IEnumerable<KeyValuePair<string, JsonNavigationElement>>.GetEnumerator()
         {
             if (JsonElement.ValueKind != JsonValueKind.Object)
                 return Enumerable.Empty<KeyValuePair<string, JsonNavigationElement>>().GetEnumerator();
 
-            return new ObjectEnumeratorWrapper(JsonElement, IsStablePropertyOrder);
+            return CachedProperties
+                ? new ObjectEnumeratorWrapper(_properties.Value)
+                : new ObjectEnumeratorWrapper(JsonElement, IsStablePropertyOrder);
         }
 
         /// <summary>
