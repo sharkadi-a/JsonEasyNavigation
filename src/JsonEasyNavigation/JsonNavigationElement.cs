@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace System.Text.Json
 {
@@ -10,6 +12,8 @@ namespace System.Text.Json
     public readonly partial struct JsonNavigationElement
     {
         internal bool IsStablePropertyOrder { get; }
+
+        internal bool CachedProperties => _properties != default;
         
         /// <summary>
         /// Does <see cref="JsonElement"/> exists in JSON structure? This allows to check if JSON element being searched exist
@@ -65,8 +69,10 @@ namespace System.Text.Json
         /// </summary>
         public JsonElement JsonElement { get; }
 
-        private JsonNavigationElement(JsonElement jsonElement, string name, int index, bool isStablePropertyOrder) : this(
-            jsonElement, isStablePropertyOrder)
+        private readonly Lazy<JsonProperty[]> _properties;
+
+        private JsonNavigationElement(JsonElement jsonElement, string name, int index, bool isStablePropertyOrder, bool precacheProperties) : this(
+            jsonElement, isStablePropertyOrder, precacheProperties)
         {
             Name = name;
             HasName = true;
@@ -74,21 +80,21 @@ namespace System.Text.Json
             HasIndex = true;
         }
 
-        private JsonNavigationElement(JsonElement jsonElement, string name, bool isStablePropertyOrder) : this(
-            jsonElement, isStablePropertyOrder)
+        private JsonNavigationElement(JsonElement jsonElement, string name, bool isStablePropertyOrder, bool precacheProperties) : this(
+            jsonElement, isStablePropertyOrder, precacheProperties)
         {
             Name = name;
             HasName = true;
         }
 
-        private JsonNavigationElement(JsonElement jsonElement, int index, bool isStablePropertyOrder) : this(
-            jsonElement, isStablePropertyOrder)
+        private JsonNavigationElement(JsonElement jsonElement, int index, bool isStablePropertyOrder, bool precacheProperties) : this(
+            jsonElement, isStablePropertyOrder, precacheProperties)
         {
             Index = index;
             HasIndex = true;
         }
         
-        internal JsonNavigationElement(JsonElement jsonElement, bool isStablePropertyOrder)
+        internal JsonNavigationElement(JsonElement jsonElement, bool isStablePropertyOrder, bool precacheProperties)
         {
             IsStablePropertyOrder = isStablePropertyOrder;
             JsonElement = jsonElement;
@@ -97,6 +103,16 @@ namespace System.Text.Json
             Index = 0;
             HasIndex = false;
             HasName = false;
+
+            _properties = precacheProperties
+                ? new Lazy<JsonProperty[]>(() =>
+                {
+                    IEnumerable<JsonProperty> elements = isStablePropertyOrder
+                        ? jsonElement.EnumerateObject().OrderBy(x => x.Name)
+                        : jsonElement.EnumerateObject();
+                    return elements.ToArray();
+                }, LazyThreadSafetyMode.ExecutionAndPublication)
+                : default;
         }
 
         /// <summary>

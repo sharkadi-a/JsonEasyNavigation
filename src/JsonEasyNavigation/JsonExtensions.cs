@@ -11,25 +11,52 @@ namespace System.Text.Json
     public static class JsonExtensions
     {
         /// <summary>
-        /// Makes this <see cref="JsonNavigationElement"/> and all it's descendants to have a stable order of the
+        /// Makes the <see cref="JsonNavigationElement"/> and all it's descendants to have a stable order of the
         /// properties in object-kind elements.
         /// </summary>
         public static JsonNavigationElement WithStablePropertyOrder(this JsonNavigationElement jsonNavigationElement)
         {
             return jsonNavigationElement.IsStablePropertyOrder
                 ? jsonNavigationElement
-                : new JsonNavigationElement(jsonNavigationElement.JsonElement, true);
+                : new JsonNavigationElement(jsonNavigationElement.JsonElement, true, jsonNavigationElement.CachedProperties);
         }
 
         /// <summary>
-        /// Makes this <see cref="JsonNavigationElement"/> and all it's descendants to have an unstable order of the 
-        /// properties in object-kind elements. This does not imply that elements will definitely have random order, 
-        /// but the order is not guaranteed.
+        /// Makes the <see cref="JsonNavigationElement"/> and all it's descendants to have an unstable order (well,
+        /// may be) of the properties in object-kind elements. This does not imply that elements will definitely have
+        /// random order, but the order is not guaranteed.
         /// </summary>
         public static JsonNavigationElement WithoutStablePropertyOrder(this JsonNavigationElement jsonNavigationElement)
         {
             return jsonNavigationElement.IsStablePropertyOrder
-                ? new JsonNavigationElement(jsonNavigationElement.JsonElement, false)
+                ? new JsonNavigationElement(jsonNavigationElement.JsonElement, false, jsonNavigationElement.CachedProperties)
+                : jsonNavigationElement;
+        }
+
+        /// <summary>
+        /// Makes the <see cref="JsonNavigationElement"/> and all it's descendants to have properties cached in an array.
+        /// May be useful if <see cref="JsonNavigationElement"/> is being used multiple time to access it's <see cref="JsonElement"/>
+        /// properties. Allocates memory in heap (just once, when enumeration is executed).
+        /// </summary>
+        public static JsonNavigationElement WithCachedProperties(this JsonNavigationElement jsonNavigationElement)
+        {
+            return jsonNavigationElement.CachedProperties
+                ? jsonNavigationElement
+                : new JsonNavigationElement(jsonNavigationElement.JsonElement,
+                    jsonNavigationElement.IsStablePropertyOrder, true);
+        }
+
+        /// <summary>
+        /// Makes the <see cref="JsonNavigationElement"/> and all it's descendants to have all properties not to
+        /// be cached. 
+        /// </summary>
+        /// <param name="jsonNavigationElement"></param>
+        /// <returns></returns>
+        public static JsonNavigationElement WithoutCachedProperties(this JsonNavigationElement jsonNavigationElement)
+        {
+            return jsonNavigationElement.CachedProperties
+                ? new JsonNavigationElement(jsonNavigationElement.JsonElement,
+                    jsonNavigationElement.IsStablePropertyOrder, false)
                 : jsonNavigationElement;
         }
         
@@ -39,7 +66,7 @@ namespace System.Text.Json
         /// </summary>
         public static JsonNavigationElement ToNavigation(this JsonElement jsonElement)
         {
-            return new JsonNavigationElement(jsonElement, false);
+            return new JsonNavigationElement(jsonElement, false, false);
         }
         
         /// <summary>
@@ -48,7 +75,7 @@ namespace System.Text.Json
         /// </summary>
         public static JsonNavigationElement ToNavigation(this JsonDocument jsonDocument)
         {
-            return new JsonNavigationElement(jsonDocument.RootElement, false);
+            return new JsonNavigationElement(jsonDocument.RootElement, false, false);
         }
 
         /// <summary>

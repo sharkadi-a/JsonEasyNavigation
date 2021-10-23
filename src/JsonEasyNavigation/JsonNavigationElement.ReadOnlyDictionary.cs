@@ -5,9 +5,32 @@ namespace System.Text.Json
 {
     public readonly partial struct JsonNavigationElement : IReadOnlyDictionary<string, JsonNavigationElement>
     {
+        /// <summary>
+        /// Returns a property of <see cref="JsonElement"/> having a given name. If there is no such property or
+        /// <see cref="JsonElement"/> is not an object at all, and empty <see cref="JsonNavigationElement"/>
+        /// will be returned (and it's Exist property will be false).
+        /// </summary>
+        /// <example>
+        /// Say, there is JSON document:<br/>
+        /// {<br/>
+        ///     "item1": 1,<br/>
+        ///     "item2": 2<br/>
+        /// }<br/>
+        /// And a navigation object:<br/>
+        /// var nav = JsonDocument.Parse(...).ToNavigation();<br/>
+        /// <br/>
+        /// We can get property using the indexer of <see cref="JsonNavigationElement"/>:<br/>
+        /// var number = nav["item1"].TryGetInt32OrDefault();<br/>
+        /// The number is 1, as expected.
+        /// </example>
         public JsonNavigationElement this[string property] =>
-            JsonElement.TryGetProperty(property, out var p) ? new JsonNavigationElement(p, property, IsStablePropertyOrder) : default;
+            JsonElement.TryGetProperty(property, out var p)
+                ? new JsonNavigationElement(p, property, IsStablePropertyOrder, CachedProperties)
+                : default;
 
+        /// <summary>
+        /// A total number of array items or property count in the <see cref="JsonElement"/> or 0 for other kind of elements.
+        /// </summary>
         public int Count
         {
             get
@@ -19,7 +42,7 @@ namespace System.Text.Json
                 
                 if (JsonElement.ValueKind == JsonValueKind.Object)
                 {
-                    return JsonElement.EnumerateObject().Count();
+                    return CachedProperties ? _properties.Value.Length : JsonElement.EnumerateObject().Count();
                 }
 
                 return default;
@@ -34,33 +57,52 @@ namespace System.Text.Json
             return new ObjectEnumeratorWrapper(JsonElement, IsStablePropertyOrder);
         }
 
+        /// <summary>
+        /// Returns true if the <see cref="JsonElement"/> is an object and contains a property with a give name.
+        /// </summary>
         public bool ContainsKey(string key)
         {
             return this[key].Exist;
         }
-
+        
+        /// <summary>
+        /// Returns true and a <see cref="JsonNavigationElement"/> if the <see cref="JsonElement"/> contains a property
+        /// of a given name.
+        /// </summary>
         public bool TryGetValue(string key, out JsonNavigationElement value)
         {
             value = this[key];
             return value.Exist;
         }
 
-        public IEnumerable<string> Keys => JsonElement.EnumerateObject().Select(x => x.Name);
+        /// <summary>
+        /// Returns all property names of the <see cref="JsonElement"/>.
+        /// </summary>
+        public IEnumerable<string> Keys => CachedProperties
+            ? _properties.Value.Select(x => x.Name)
+            : JsonElement.EnumerateObject().Select(x => x.Name);
 
+        /// <summary>
+        /// Returns all properties or array items of the <see cref="JsonElement"/> or empty enumerable.
+        /// </summary>
         public IEnumerable<JsonNavigationElement> Values
         {
             get
             {
                 var isStable = IsStablePropertyOrder;
+                var preCache = CachedProperties;
                 
                 if (JsonElement.ValueKind == JsonValueKind.Array)
                 {
-                    return JsonElement.EnumerateArray().Select(x => new JsonNavigationElement(x, isStable));
+                    return JsonElement.EnumerateArray().Select(x => new JsonNavigationElement(x, isStable, preCache));
                 }
 
                 if (JsonElement.ValueKind == JsonValueKind.Object)
                 {
-                    return JsonElement.EnumerateObject().Select(x => new JsonNavigationElement(x.Value, isStable));
+                    IEnumerable<JsonProperty> properties = CachedProperties 
+                        ? _properties.Value 
+                        : JsonElement.EnumerateObject();
+                    return properties.Select(x => new JsonNavigationElement(x.Value, isStable, preCache));
                 }
                 
                 return Enumerable.Empty<JsonNavigationElement>();

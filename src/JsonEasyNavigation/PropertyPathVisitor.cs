@@ -8,7 +8,7 @@
             {
                 if (properties.Count < 1)
                 {
-                    return new JsonNavigationElement(jsonElement, false);
+                    return new JsonNavigationElement(jsonElement, false, false);
                 }
                 
                 var property = properties[0];
