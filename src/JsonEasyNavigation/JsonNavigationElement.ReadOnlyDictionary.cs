@@ -24,10 +24,20 @@ namespace JsonEasyNavigation
         /// var number = nav["item1"].TryGetInt32OrDefault();<br/>
         /// The number is 1, as expected.
         /// </example>
-        public JsonNavigationElement this[string property] =>
-            JsonElement.TryGetProperty(property, out var p)
-                ? new JsonNavigationElement(p, property, IsStablePropertyOrder, CachedProperties)
-                : default;
+        public JsonNavigationElement this[string property]
+        {
+            get
+            {
+                if (JsonElement.ValueKind != JsonValueKind.Object)
+                {
+                    return default;
+                }
+                
+                return JsonElement.TryGetProperty(property, out var p)
+                    ? new JsonNavigationElement(p, property, IsStablePropertyOrder, CachedProperties)
+                    : default;
+            }
+        }
 
         /// <summary>
         /// A total number of array items or property count in the <see cref="JsonElement"/> or 0 for other kind of elements.
@@ -57,8 +67,8 @@ namespace JsonEasyNavigation
                 return Enumerable.Empty<KeyValuePair<string, JsonNavigationElement>>().GetEnumerator();
 
             return CachedProperties
-                ? new ObjectEnumeratorWrapper(_properties.Value)
-                : new ObjectEnumeratorWrapper(JsonElement, IsStablePropertyOrder);
+                ? new ObjectEnumeratorWrapper(this, _properties.Value)
+                : new ObjectEnumeratorWrapper(this, IsStablePropertyOrder);
         }
 
         /// <summary>
@@ -82,9 +92,20 @@ namespace JsonEasyNavigation
         /// <summary>
         /// Returns all property names of the <see cref="JsonElement"/>.
         /// </summary>
-        public IEnumerable<string> Keys => CachedProperties
-            ? _properties.Value.Select(x => x.Name)
-            : JsonElement.EnumerateObject().Select(x => x.Name);
+        public IEnumerable<string> Keys
+        {
+            get
+            {
+                if (JsonElement.ValueKind != JsonValueKind.Object)
+                {
+                    return Enumerable.Empty<string>();
+                }
+                
+                return CachedProperties
+                    ? _properties.Value.Select(x => x.Name)
+                    : JsonElement.EnumerateObject().Select(x => x.Name);
+            }
+        }
 
         /// <summary>
         /// Returns all properties or array items of the <see cref="JsonElement"/> or empty enumerable.

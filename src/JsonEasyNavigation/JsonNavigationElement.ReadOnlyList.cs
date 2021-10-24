@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -43,6 +44,8 @@ namespace JsonEasyNavigation
         {
             get
             {
+                if (index < 0) throw new ArgumentOutOfRangeException(nameof(index));
+                
                 if (JsonElement.ValueKind == JsonValueKind.Array)
                 {
                     var len = JsonElement.GetArrayLength();
@@ -94,8 +97,8 @@ namespace JsonEasyNavigation
             if (JsonElement.ValueKind == JsonValueKind.Object)
             {
                 return CachedProperties
-                    ? new ObjectEnumeratorWrapper(_properties.Value)
-                    : new ObjectEnumeratorWrapper(JsonElement, IsStablePropertyOrder);
+                    ? new ObjectEnumeratorWrapper(this, _properties.Value)
+                    : new ObjectEnumeratorWrapper(this, IsStablePropertyOrder);
             }
 
             return Enumerable.Empty<JsonNavigationElement>().GetEnumerator();

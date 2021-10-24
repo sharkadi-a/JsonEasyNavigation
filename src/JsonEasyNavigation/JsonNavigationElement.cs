@@ -11,7 +11,7 @@ namespace JsonEasyNavigation
     /// properties or array items like in a dictionary or a list. <see cref="JsonNavigationElement"/>
     /// is read-only and immutable.
     /// </summary>
-    public readonly partial struct JsonNavigationElement
+    public readonly partial struct JsonNavigationElement : IEquatable<JsonNavigationElement>
     {
         internal bool IsStablePropertyOrder { get; }
 
@@ -95,7 +95,14 @@ namespace JsonEasyNavigation
             Index = index;
             HasIndex = true;
         }
-        
+
+        internal JsonNavigationElement(JsonProperty jsonProperty, int index, bool isStablePropertyOrder,
+            bool cacheProperties) : this(jsonProperty.Value, jsonProperty.Name, index, isStablePropertyOrder,
+            cacheProperties)
+        {
+
+        }
+
         internal JsonNavigationElement(JsonElement jsonElement, bool isStablePropertyOrder, bool cacheProperties)
         {
             IsStablePropertyOrder = isStablePropertyOrder;
@@ -151,6 +158,24 @@ namespace JsonEasyNavigation
                     yield return value;
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(JsonNavigationElement other)
+        {
+            return JsonElement.Equals(other.JsonElement);
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            return obj is JsonNavigationElement other && Equals(other);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return JsonElement.GetHashCode();
         }
     }
 }
