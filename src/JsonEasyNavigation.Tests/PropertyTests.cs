@@ -33,6 +33,59 @@ namespace JsonEasyNavigation.Tests
         }
 
         [Fact]
+        public void WhenPropertyExist_ValueShouldNotBeNull()
+        {
+            var json = @"{ ""item1"" : ""value"" }";
+
+            var jsonDocument = JsonDocument.Parse(json);
+            var nav = jsonDocument.ToNavigation();
+
+            var item = nav["item1"];
+            item.Exist.ShouldBeTrue();
+            item.IsNullValue.ShouldBeFalse();
+        }
+        
+        [Fact]
+        public void WhenPropertyIsNull_ShouldSucceed()
+        {
+            var json = @"{ ""item1"" : null }";
+
+            var jsonDocument = JsonDocument.Parse(json);
+            var nav = jsonDocument.ToNavigation();
+
+            var item = nav["item1"];
+            item.Exist.ShouldBeTrue();
+            item.IsNullValue.ShouldBeTrue();
+        }        
+        
+        [Fact]
+        public void WhenPropertyIsEmptyObject_ShouldSucceed()
+        {
+            var json = @"{ ""item1"" : {} }";
+
+            var jsonDocument = JsonDocument.Parse(json);
+            var nav = jsonDocument.ToNavigation();
+
+            var item = nav["item1"];
+            item.Exist.ShouldBeTrue();
+            item.IsNullValue.ShouldBeFalse();
+            item.Count.ShouldBe(0);
+        }
+
+        [Fact]
+        public void WhenPropertyDoesNotExist_ValueShouldBeNull()
+        {
+            var json = @"{ ""item1"" : null }";
+
+            var jsonDocument = JsonDocument.Parse(json);
+            var nav = jsonDocument.ToNavigation();
+
+            var item = nav["item2"];
+            item.Exist.ShouldBeFalse();
+            item.IsNullValue.ShouldBeTrue();
+        }
+
+        [Fact]
         public void JsonPropertiesCount_ShouldSucceed()
         {
             var json = @"{ ""item1"" : ""first"", ""item2"": ""second"" }";

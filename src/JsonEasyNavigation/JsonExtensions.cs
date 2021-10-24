@@ -19,7 +19,7 @@ namespace JsonEasyNavigation
         {
             return jsonNavigationElement.IsStablePropertyOrder
                 ? jsonNavigationElement
-                : new JsonNavigationElement(jsonNavigationElement.JsonElement, true, jsonNavigationElement.CachedProperties);
+                : new JsonNavigationElement(jsonNavigationElement.JsonElement, true, jsonNavigationElement.HasCachedProperties);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace JsonEasyNavigation
         public static JsonNavigationElement WithoutStablePropertyOrder(this JsonNavigationElement jsonNavigationElement)
         {
             return jsonNavigationElement.IsStablePropertyOrder
-                ? new JsonNavigationElement(jsonNavigationElement.JsonElement, false, jsonNavigationElement.CachedProperties)
+                ? new JsonNavigationElement(jsonNavigationElement.JsonElement, false, jsonNavigationElement.HasCachedProperties)
                 : jsonNavigationElement;
         }
 
@@ -41,7 +41,7 @@ namespace JsonEasyNavigation
         /// </summary>
         public static JsonNavigationElement WithCachedProperties(this JsonNavigationElement jsonNavigationElement)
         {
-            return jsonNavigationElement.CachedProperties
+            return jsonNavigationElement.HasCachedProperties
                 ? jsonNavigationElement
                 : new JsonNavigationElement(jsonNavigationElement.JsonElement,
                     jsonNavigationElement.IsStablePropertyOrder, true);
@@ -55,7 +55,7 @@ namespace JsonEasyNavigation
         /// <returns></returns>
         public static JsonNavigationElement WithoutCachedProperties(this JsonNavigationElement jsonNavigationElement)
         {
-            return jsonNavigationElement.CachedProperties
+            return jsonNavigationElement.HasCachedProperties
                 ? new JsonNavigationElement(jsonNavigationElement.JsonElement,
                     jsonNavigationElement.IsStablePropertyOrder, false)
                 : jsonNavigationElement;

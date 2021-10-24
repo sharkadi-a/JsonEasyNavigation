@@ -31,6 +31,19 @@ namespace JsonEasyNavigation.Tests
         }
 
         [Fact]
+        public void WhenEmptyArray_ShouldSucceed()
+        {
+            var json = @"[ ]";
+
+            var jsonDocument = JsonDocument.Parse(json);
+            var nav = jsonDocument.ToNavigation();
+            
+            nav.Exist.ShouldBeTrue();
+            nav.IsNullValue.ShouldBeFalse();
+            nav.Count.ShouldBe(0);
+        }
+
+        [Fact]
         public void ArrayCount_ShouldSucceed()
         {
             var json = @"[ ""item1"", ""item2"", ""item3"", ""item4"" ]";

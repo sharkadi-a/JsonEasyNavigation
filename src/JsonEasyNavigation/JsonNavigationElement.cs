@@ -15,7 +15,13 @@ namespace JsonEasyNavigation
     {
         internal bool IsStablePropertyOrder { get; }
 
-        internal bool CachedProperties => _properties != default;
+        internal bool HasCachedProperties => _properties != default;
+
+        /// <summary>
+        /// Returns true if the <see cref="JsonElement"/> is null. The element can exist (i.e. <see cref="Exist"/>
+        /// is true) but still be null.
+        /// </summary>
+        public bool IsNullValue => JsonElement.ValueKind == JsonValueKind.Null || !Exist;
         
         /// <summary>
         /// Does <see cref="JsonElement"/> exists in JSON structure? This allows to check if JSON element being
@@ -149,15 +155,92 @@ namespace JsonEasyNavigation
             return JsonElement.TryGetInt16(out var value) ? value : default;
         }
 
-        public IEnumerable<int> GetEnumerableOfInt32OrEmpty()
+        public uint GetUInt32OrDefault()
         {
-            foreach (var nav in this)
+            if (JsonElement.ValueKind != JsonValueKind.Number) return default;
+            return JsonElement.TryGetUInt32(out var value) ? value : default;
+        }        
+        
+        public ulong GetUInt64OrDefault()
+        {
+            if (JsonElement.ValueKind != JsonValueKind.Number) return default;
+            return JsonElement.TryGetUInt64(out var value) ? value : default;
+        }        
+        
+        public ushort GetUInt16OrDefault()
+        {
+            if (JsonElement.ValueKind != JsonValueKind.Number) return default;
+            return JsonElement.TryGetUInt16(out var value) ? value : default;
+        }
+
+        public decimal GetDecimalOrDefault()
+        {
+            if (JsonElement.ValueKind != JsonValueKind.Number) return default;
+            return JsonElement.TryGetDecimal(out var value) ? value : default;
+        }
+        
+        public double GetDoubleOrDefault()
+        {
+            if (JsonElement.ValueKind != JsonValueKind.Number) return default;
+            return JsonElement.TryGetDouble(out var value) ? value : default;
+        }
+        
+        public byte GetByteOrDefault()
+        {
+            if (JsonElement.ValueKind != JsonValueKind.Number) return default;
+            return JsonElement.TryGetByte(out var value) ? value : default;
+        }
+
+        public sbyte GetSByteOrDefault()
+        {
+            if (JsonElement.ValueKind != JsonValueKind.Number) return default;
+            return JsonElement.TryGetSByte(out var value) ? value : default;
+        }
+
+        public float GetSingleOrDefault()
+        {
+            if (JsonElement.ValueKind != JsonValueKind.Number) return default;
+            return JsonElement.TryGetSingle(out var value) ? value : default;
+        }
+
+        public Guid GetGuidOrDefault()
+        {
+            if (JsonElement.ValueKind != JsonValueKind.String) return default;
+            return JsonElement.TryGetGuid(out var value) ? value : default;
+        }
+
+        public DateTime GetDateTimeOrDefault()
+        {
+            if (JsonElement.ValueKind != JsonValueKind.String) return default;
+            return JsonElement.TryGetDateTime(out var value) ? value : default;
+        }
+
+        public DateTimeOffset GetDateTimeOffsetOrDefault(bool tryUnixTime = false)
+        {
+            if (JsonElement.ValueKind == JsonValueKind.String)
             {
-                if (nav.JsonElement.TryGetInt32(out var value))
-                {
-                    yield return value;
-                }
+                return JsonElement.TryGetDateTimeOffset(out var value) ? value : default;
             }
+
+            if (!tryUnixTime) return default;
+            
+            if (JsonElement.TryGetInt64(out var seconds))
+            {
+                return DateTimeOffset.UnixEpoch.AddSeconds(seconds);
+            }
+
+            if (JsonElement.TryGetDouble(out var decimalSeconds))
+            {
+                return DateTimeOffset.UnixEpoch.AddSeconds(decimalSeconds);
+            }
+
+            return default;
+        }
+
+        public byte[] GetBytesFromBase64OrDefault()
+        {
+            if (JsonElement.ValueKind != JsonValueKind.String) return default;
+            return JsonElement.TryGetBytesFromBase64(out var value) ? value : Array.Empty<byte>();
         }
 
         /// <inheritdoc/>

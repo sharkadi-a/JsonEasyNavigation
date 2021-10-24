@@ -48,7 +48,7 @@ namespace JsonEasyNavigation
             new(_enumerator.Current.Name, Current);
 
         public JsonNavigationElement Current => new(_enumerator.Current,
-            counter, _element.IsStablePropertyOrder, _element.CachedProperties);
+            counter, _element.IsStablePropertyOrder, _element.HasCachedProperties);
 
         object IEnumerator.Current => Current;
 

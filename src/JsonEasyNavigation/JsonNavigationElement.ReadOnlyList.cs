@@ -51,20 +51,20 @@ namespace JsonEasyNavigation
                     var len = JsonElement.GetArrayLength();
                     return index < len
                         ? new JsonNavigationElement(JsonElement[index], index, IsStablePropertyOrder,
-                            CachedProperties)
+                            HasCachedProperties)
                         : default;
                 }
 
                 if (JsonElement.ValueKind == JsonValueKind.Object)
                 {
-                    if (CachedProperties)
+                    if (HasCachedProperties)
                     {
                         if (_properties.Value.Length == 0) return default;
                         if (index >= 0 && index < _properties.Value.Length)
                         {
                             var property = _properties.Value[index];
                             return new JsonNavigationElement(property.Value, property.Name, IsStablePropertyOrder,
-                                CachedProperties);
+                                HasCachedProperties);
                         }
                     }
                     
@@ -77,7 +77,7 @@ namespace JsonEasyNavigation
                     {
                         if (c == index)
                             return new JsonNavigationElement(property.Value, property.Name, c, IsStablePropertyOrder,
-                                CachedProperties);
+                                HasCachedProperties);
                         c++;
                     }
                 }
@@ -96,7 +96,7 @@ namespace JsonEasyNavigation
 
             if (JsonElement.ValueKind == JsonValueKind.Object)
             {
-                return CachedProperties
+                return HasCachedProperties
                     ? new ObjectEnumeratorWrapper(this, _properties.Value)
                     : new ObjectEnumeratorWrapper(this, IsStablePropertyOrder);
             }

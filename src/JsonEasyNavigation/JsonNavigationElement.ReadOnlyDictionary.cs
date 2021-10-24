@@ -34,7 +34,7 @@ namespace JsonEasyNavigation
                 }
                 
                 return JsonElement.TryGetProperty(property, out var p)
-                    ? new JsonNavigationElement(p, property, IsStablePropertyOrder, CachedProperties)
+                    ? new JsonNavigationElement(p, property, IsStablePropertyOrder, HasCachedProperties)
                     : default;
             }
         }
@@ -53,7 +53,7 @@ namespace JsonEasyNavigation
                 
                 if (JsonElement.ValueKind == JsonValueKind.Object)
                 {
-                    return CachedProperties ? _properties.Value.Length : JsonElement.EnumerateObject().Count();
+                    return HasCachedProperties ? _properties.Value.Length : JsonElement.EnumerateObject().Count();
                 }
 
                 return default;
@@ -66,7 +66,7 @@ namespace JsonEasyNavigation
             if (JsonElement.ValueKind != JsonValueKind.Object)
                 return Enumerable.Empty<KeyValuePair<string, JsonNavigationElement>>().GetEnumerator();
 
-            return CachedProperties
+            return HasCachedProperties
                 ? new ObjectEnumeratorWrapper(this, _properties.Value)
                 : new ObjectEnumeratorWrapper(this, IsStablePropertyOrder);
         }
@@ -101,7 +101,7 @@ namespace JsonEasyNavigation
                     return Enumerable.Empty<string>();
                 }
                 
-                return CachedProperties
+                return HasCachedProperties
                     ? _properties.Value.Select(x => x.Name)
                     : JsonElement.EnumerateObject().Select(x => x.Name);
             }
@@ -115,7 +115,7 @@ namespace JsonEasyNavigation
             get
             {
                 var isStable = IsStablePropertyOrder;
-                var preCache = CachedProperties;
+                var preCache = HasCachedProperties;
                 
                 if (JsonElement.ValueKind == JsonValueKind.Array)
                 {
@@ -124,7 +124,7 @@ namespace JsonEasyNavigation
 
                 if (JsonElement.ValueKind == JsonValueKind.Object)
                 {
-                    IEnumerable<JsonProperty> properties = CachedProperties 
+                    IEnumerable<JsonProperty> properties = HasCachedProperties 
                         ? _properties.Value 
                         : JsonElement.EnumerateObject();
                     return properties.Select(x => new JsonNavigationElement(x.Value, isStable, preCache));
