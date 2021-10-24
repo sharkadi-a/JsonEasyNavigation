@@ -22,5 +22,22 @@ namespace JsonEasyNavigation.Tests
             item1.GetStringOrEmpty().ShouldBe("item1");
             item2.GetStringOrEmpty().ShouldBe("item2");
         }
+
+        [Fact]
+        public void WhenArrayInArray_ShouldSucceed()
+        {
+            var json = @"[ ""item1"", ""item2"", [ ""item31"", ""item32"" ] ]";
+
+            var jsonDocument = JsonDocument.Parse(json);
+            var nav = jsonDocument.ToNavigation();
+
+            var item = nav[2];
+            item.Exist.ShouldBeTrue();
+            item.JsonElement.ValueKind.ShouldBe(JsonValueKind.Array);
+            
+            var inner = item[1];
+            inner.Exist.ShouldBeTrue();
+            inner.GetStringOrEmpty().ShouldBe("item32");
+        }
     }
 }

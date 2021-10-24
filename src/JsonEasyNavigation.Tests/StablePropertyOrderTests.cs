@@ -29,6 +29,7 @@ namespace JsonEasyNavigation.Tests
 
             var nav1 = nav[0];
             var nav2 = nav[1];
+            var nav3 = nav[2];
             
             nav1.Exist.ShouldBeTrue();
             nav1.HasName.ShouldBeTrue();
@@ -37,6 +38,10 @@ namespace JsonEasyNavigation.Tests
             nav2.Exist.ShouldBeTrue();
             nav2.HasName.ShouldBeTrue();
             nav2.Name.ShouldBe("item3");
+
+            nav3.Exist.ShouldBeTrue();
+            nav3.HasName.ShouldBeTrue();
+            nav3.Name.ShouldBe("item4");
         }
 
         [Fact]
@@ -59,6 +64,24 @@ namespace JsonEasyNavigation.Tests
             innerFirst.HasName.ShouldBeTrue();
             innerFirst.Name.ShouldBe("item20");
             innerFirst.GetInt32OrDefault().ShouldBe(20);
+        }
+
+        [Fact]
+        public void WithStableDescendantsAndSameObject_ShouldAlsoBeSorted()
+        {
+            var json = @"{ ""item11"" : 11, ""item10"": { ""item21"" : 21, ""item20"" : 20, ""item22"" : 22 } }";
+            
+            var jsonDocument = JsonDocument.Parse(json);
+            var nav = jsonDocument.ToNavigation().WithStablePropertyOrder();
+
+            var item = nav[0];
+            item.Exist.ShouldBeTrue();
+            item.HasName.ShouldBeTrue();
+            item.Name.ShouldBe("item10");
+            
+            item[0].GetInt32OrDefault().ShouldBe(20);
+            item[1].GetInt32OrDefault().ShouldBe(21);
+            item[2].GetInt32OrDefault().ShouldBe(22);
         }
 
         [Fact]
