@@ -64,6 +64,8 @@ namespace JsonEasyNavigation.Tests
         [InlineData(@"{ ""item"": """" }")]
         [InlineData(@"{ ""item"": [] }")]
         [InlineData(@"{ ""item"": null }")]
+        [InlineData(@"{ ""item"": true }")]
+        [InlineData(@"{ ""item"": false }")]
         public void WhenValueIsNotNumber_ShouldFail(string json)
         {
             var jsonDocument = JsonDocument.Parse(json);

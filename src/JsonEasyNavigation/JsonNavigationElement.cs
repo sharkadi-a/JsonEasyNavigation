@@ -215,26 +215,10 @@ namespace JsonEasyNavigation
             return JsonElement.TryGetDateTime(out var value) ? value : default;
         }
 
-        public DateTimeOffset GetDateTimeOffsetOrDefault(bool tryUnixTime = false)
+        public DateTimeOffset GetDateTimeOffsetOrDefault()
         {
-            if (JsonElement.ValueKind == JsonValueKind.String)
-            {
-                return JsonElement.TryGetDateTimeOffset(out var value) ? value : default;
-            }
-
-            if (!tryUnixTime) return default;
-            
-            if (JsonElement.TryGetInt64(out var seconds))
-            {
-                return DateTimeOffset.UnixEpoch.AddSeconds(seconds);
-            }
-
-            if (JsonElement.TryGetDouble(out var decimalSeconds))
-            {
-                return DateTimeOffset.UnixEpoch.AddSeconds(decimalSeconds);
-            }
-
-            return default;
+            if (JsonElement.ValueKind != JsonValueKind.String) return default;
+            return JsonElement.TryGetDateTimeOffset(out var value) ? value : default;
         }
 
         public byte[] GetBytesFromBase64OrDefault()
@@ -243,6 +227,16 @@ namespace JsonEasyNavigation
             return JsonElement.TryGetBytesFromBase64(out var value) ? value : Array.Empty<byte>();
         }
 
+        public bool GetBooleanOrDefault()
+        {
+            return JsonElement.ValueKind == JsonValueKind.True;
+        }
+
+        public bool TryGetPrimitiveValue<T>(out T value)
+        {
+            return PrimitiveValueExtractor.TryGetValue(JsonElement, out value);
+        }
+        
         /// <inheritdoc/>
         public bool Equals(JsonNavigationElement other)
         {
