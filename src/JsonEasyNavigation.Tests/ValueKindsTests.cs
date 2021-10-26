@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Text.Json;
 using Shouldly;
@@ -21,6 +22,8 @@ namespace JsonEasyNavigation.Tests
             item.Exist.ShouldBeTrue();
             item.JsonElement.ValueKind.ShouldBe(kind);
             item.GetBooleanOrDefault().ShouldBe(expected);
+            item.TryGetValue(out bool value).ShouldBeTrue();
+            value.ShouldBe(expected);
         }
 
         [Theory]
@@ -41,6 +44,7 @@ namespace JsonEasyNavigation.Tests
             item.JsonElement.ValueKind.ShouldNotBe(JsonValueKind.True);
             item.JsonElement.ValueKind.ShouldNotBe(JsonValueKind.False);
             item.GetBooleanOrDefault().ShouldBeFalse();
+            item.TryGetValue(out bool _).ShouldBeFalse();
         }
 
         [Fact]
@@ -54,7 +58,9 @@ namespace JsonEasyNavigation.Tests
             var item = nav["item"];
             item.Exist.ShouldBeTrue();
             item.GetDateTimeOrDefault().ShouldBe(new DateTime(2021, 10, 25, 12, 30, 30));
+            item.GetValueOrDefault<DateTime>().ShouldBe(new DateTime(2021, 10, 25, 12, 30, 30));
             item.GetDateTimeOffsetOrDefault().ShouldBe(new DateTime(2021, 10, 25, 12, 30, 30));
+            item.GetValueOrDefault<DateTimeOffset>().ShouldBe(new DateTime(2021, 10, 25, 12, 30, 30));
         }
         
         [Fact]
@@ -69,6 +75,7 @@ namespace JsonEasyNavigation.Tests
             item.Exist.ShouldBeTrue();
             var offset = new DateTimeOffset(new DateTime(2021, 10, 25, 12, 30, 30));
             item.GetDateTimeOffsetOrDefault().ShouldBe(offset);
+            item.GetValueOrDefault<DateTimeOffset>().ShouldBe(offset);
         }        
         
         [Theory]
@@ -89,6 +96,7 @@ namespace JsonEasyNavigation.Tests
             var item = nav["item"];
             item.Exist.ShouldBeTrue();
             item.GetDateTimeOffsetOrDefault().ShouldBe(default);
+            item.TryGetValue(out DateTimeOffset _).ShouldBe(default);
         }
 
         [Fact]
@@ -103,6 +111,7 @@ namespace JsonEasyNavigation.Tests
             var item = nav["item"];
             item.Exist.ShouldBeTrue();
             item.GetGuidOrDefault().ShouldBe(guid);
+            item.GetValueOrDefault<Guid>().ShouldBe(guid);
         }        
         
         [Theory]
@@ -123,6 +132,7 @@ namespace JsonEasyNavigation.Tests
             var item = nav["item"];
             item.Exist.ShouldBeTrue();
             item.GetGuidOrDefault().ShouldBe(default);
+            item.GetValueOrDefault<Guid>().ShouldBe(default);
         }
 
         [Theory]
@@ -138,6 +148,7 @@ namespace JsonEasyNavigation.Tests
             item.Exist.ShouldBeTrue();
             item.JsonElement.ValueKind.ShouldBe(JsonValueKind.String);
             item.GetStringOrEmpty().ShouldBe("string");
+            item.GetValueOrDefault<string>().ShouldBe("string");
         }
         
         [Theory]
@@ -159,6 +170,7 @@ namespace JsonEasyNavigation.Tests
             item.JsonElement.ValueKind.ShouldNotBe(JsonValueKind.String);
             item.GetStringOrDefault().ShouldBe(default);
             item.GetStringOrEmpty().ShouldBe(string.Empty);
+            item.TryGetValue(out string _).ShouldBeFalse();
         }
 
         [Fact]
@@ -171,7 +183,19 @@ namespace JsonEasyNavigation.Tests
 
             var item = nav["item"];
             item.Exist.ShouldBeTrue();
+            
             var bytes = item.GetBytesFromBase64OrDefault();
+            Encoding.UTF8.GetString(bytes).ShouldBe("Hello, world!");
+
+            bytes = item.GetValueOrDefault<byte[]>();
+            Encoding.UTF8.GetString(bytes).ShouldBe("Hello, world!");
+
+            using var stream = item.GetStreamFromBase64OrDefault();
+            stream.Read(bytes, 0, (int)stream.Length);
+            Encoding.UTF8.GetString(bytes).ShouldBe("Hello, world!");
+
+            using var stream2 = item.GetValueOrDefault<Stream>();
+            stream2.Read(bytes, 0, (int)stream2.Length);
             Encoding.UTF8.GetString(bytes).ShouldBe("Hello, world!");
         }
 
@@ -192,6 +216,7 @@ namespace JsonEasyNavigation.Tests
             var item = nav["item"];
             item.Exist.ShouldBeTrue();
             item.GetBytesFromBase64OrDefault().ShouldBe(default);
+            item.TryGetValue(out byte[] _).ShouldBeFalse();
         }
     }
 }

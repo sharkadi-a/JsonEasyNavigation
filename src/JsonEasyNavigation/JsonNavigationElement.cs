@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
@@ -127,114 +128,188 @@ namespace JsonEasyNavigation
         }
 
         /// <summary>
-        /// Returns wrapped <see cref="JsonElement"/> as a string or default value, if this element is not a string.
-        /// This method should never throw an exception.
+        /// Returns wrapped <see cref="JsonElement"/> as a <see cref="string"/> or it's default value, if this element is not a string.
+        /// This method should never throw an exception. May allocate is the heap.
         /// </summary>
         public string GetStringOrDefault()
         {
             return JsonElement.ValueKind == JsonValueKind.String ? JsonElement.ToString() : default;
         }
 
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as a <see cref="string"/>  or <see cref="string.Empty"/>, if this element is not a string.
+        /// This method should never throw an exception. May allocate is the heap.
+        /// </summary>
         public string GetStringOrEmpty() => GetStringOrDefault() ?? string.Empty;
 
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as an <see cref="int"/> or it's default value.
+        /// </summary>
         public int GetInt32OrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetInt32(out var value) ? value : default;
         }        
         
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as an <see cref="long"/> or it's default value.
+        /// </summary>
         public long GetInt64OrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetInt64(out var value) ? value : default;
         }        
         
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as an <see cref="short"/> or it's default value.
+        /// </summary>
         public short GetInt16OrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetInt16(out var value) ? value : default;
         }
 
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as an <see cref="uint"/> or it's default value.
+        /// </summary>
         public uint GetUInt32OrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetUInt32(out var value) ? value : default;
         }        
         
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as an <see cref="ulong"/> or it's default value.
+        /// </summary>
         public ulong GetUInt64OrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetUInt64(out var value) ? value : default;
         }        
         
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as an <see cref="ushort"/> or it's default value.
+        /// </summary>
         public ushort GetUInt16OrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetUInt16(out var value) ? value : default;
         }
 
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as a <see cref="decimal"/> or it's default value.
+        /// </summary>
         public decimal GetDecimalOrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetDecimal(out var value) ? value : default;
         }
         
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as a <see cref="double"/> or it's default value.
+        /// </summary>
         public double GetDoubleOrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetDouble(out var value) ? value : default;
         }
         
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as a <see cref="byte"/> or it's default value.
+        /// </summary>
         public byte GetByteOrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetByte(out var value) ? value : default;
         }
 
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as a <see cref="sbyte"/> or it's default value.
+        /// </summary>
         public sbyte GetSByteOrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetSByte(out var value) ? value : default;
         }
 
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as a <see cref="float"/> or it's default value.
+        /// </summary>
         public float GetSingleOrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.Number) return default;
             return JsonElement.TryGetSingle(out var value) ? value : default;
         }
 
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as a <see cref="Guid"/> or it's default value.
+        /// </summary>
         public Guid GetGuidOrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.String) return default;
             return JsonElement.TryGetGuid(out var value) ? value : default;
         }
 
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as a <see cref="DateTime"/> or it's default value.
+        /// </summary>
         public DateTime GetDateTimeOrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.String) return default;
             return JsonElement.TryGetDateTime(out var value) ? value : default;
         }
 
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as an <see cref="DateTimeOffset"/> or it's default value.
+        /// </summary>
         public DateTimeOffset GetDateTimeOffsetOrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.String) return default;
             return JsonElement.TryGetDateTimeOffset(out var value) ? value : default;
         }
 
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as an array of <see cref="byte"/> or it's default value.
+        /// </summary>
         public byte[] GetBytesFromBase64OrDefault()
         {
             if (JsonElement.ValueKind != JsonValueKind.String) return default;
             return JsonElement.TryGetBytesFromBase64(out var value) ? value : Array.Empty<byte>();
         }
 
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as a <see cref="Stream"/> or it's default value.
+        /// </summary>
+        public Stream GetStreamFromBase64OrDefault()
+        {
+            return JsonElement.ValueKind != JsonValueKind.String
+                ? Stream.Null
+                : new MemoryStream(GetBytesFromBase64OrDefault());
+        }
+
+        /// <summary>
+        /// Returns wrapped <see cref="JsonElement"/> as a <see cref="bool"/> or it's default value.
+        /// </summary>
         public bool GetBooleanOrDefault()
         {
             return JsonElement.ValueKind == JsonValueKind.True;
         }
 
-        public bool TryGetPrimitiveValue<T>(out T value)
+        /// <summary>
+        /// Tries to get <see cref="JsonElement"/> value as of type <typeparam name="T"/> or returns false, if this fails.
+        /// </summary>
+        public bool TryGetValue<T>(out T value)
         {
             return PrimitiveValueExtractor.TryGetValue(JsonElement, out value);
+        }
+
+        /// <summary>
+        /// Tries to get <see cref="JsonElement"/> value as of type <typeparam name="T"/> or returns it's default value,
+        /// if this fails.
+        /// </summary>
+        public T GetValueOrDefault<T>()
+        {
+            return PrimitiveValueExtractor.TryGetValue(JsonElement, out T value) ? value : default;
         }
         
         /// <inheritdoc/>
