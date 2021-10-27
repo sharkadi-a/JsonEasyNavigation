@@ -9,7 +9,7 @@
         <Description>This library provides a wrapper class around JsonElement (located in System.Text.Json) which allows to navigate through JSON DOM (domain object model) hierarchy using indexer-style syntax (as in collections and dictionaries) for properties and array alike. It also contains useful methods to get values without throwing exceptions. </Description>
         <Copyright>(c) Sharkadi Andrey</Copyright>
         <PackageProjectUrl>https://github.com/sharkadi-a/JsonEasyNavigation</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/sharkadi-a/JsonEasyNavigation/LICENSE.md</PackageLicenseUrl>
+        <PackageLicenseUrl>https://github.com/sharkadi-a/JsonEasyNavigation/LICENSE.txt</PackageLicenseUrl>
         <PackageTags>text.json json navigation indexer dictionary list collection DOM</PackageTags>
     </PropertyGroup>
 
