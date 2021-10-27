@@ -3,7 +3,8 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <PackageVersion>0.1</PackageVersion>
+        <PackageVersion>0.1-pre01</PackageVersion>
+        <PackageIcon>logo.png</PackageIcon>
         <Title>JsonEasyNavigation</Title>
         <Authors>Sharkadi Andrey</Authors>
         <Description>This library provides a wrapper class around JsonElement (located in System.Text.Json) which allows to navigate through JSON DOM (domain object model) hierarchy using indexer-style syntax (as in collections and dictionaries) for properties and array alike. It also contains useful methods to get values without throwing exceptions. </Description>
@@ -14,10 +15,6 @@
 
     <PropertyGroup>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <PackageIcon>..\..\media\logo.png</PackageIcon>
     </PropertyGroup>
 
     <ItemGroup>
