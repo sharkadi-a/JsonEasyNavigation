@@ -1,5 +1,7 @@
 ![JsonEasyNavigation](./media/logo.png "Mass Transit")
 
+![.NET](https://github.com/sharkadi-a/JsonEasyNavigation/actions/workflows/dotnet.yml/badge.svg)
+
 # JsonEasyNavigation
 
 This library provides a wrapper class around JsonElement (located in System.Text.Json) which allows to navigate through JSON DOM (domain object model) hierarchy using indexer-style syntax (as in collections and dictionaries) for properties and array alike. It also contains useful methods to get values without throwing exceptions.
