@@ -73,7 +73,8 @@ namespace JsonEasyNavigation.Tests
 
             var item = nav["item"];
             item.Exist.ShouldBeTrue();
-            var offset = new DateTimeOffset(new DateTime(2021, 10, 25, 12, 30, 30));
+            var offset = new DateTimeOffset(new DateTime(2021, 10, 25, 12, 30, 30, DateTimeKind.Unspecified),
+                TimeSpan.FromHours(3));
             item.GetDateTimeOffsetOrDefault().ShouldBe(offset);
             item.GetValueOrDefault<DateTimeOffset>().ShouldBe(offset);
         }        
