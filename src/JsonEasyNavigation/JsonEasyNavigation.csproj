@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <PackageVersion>0.1-pre01</PackageVersion>
+        <PackageVersion>1.0</PackageVersion>
         <PackageIcon>logo.png</PackageIcon>
         <Title>JsonEasyNavigation</Title>
         <Authors>Sharkadi Andrey</Authors>
