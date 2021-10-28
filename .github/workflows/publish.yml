@@ -3,12 +3,12 @@ on:
   push:
     branches:
       - main # Default release branch
-  workflow-run:
+  workflow_run:
     workflows: [".NET"]
     branches: [main]
     types:
       - completed
-      
+
 jobs:
   publish:
     name: build, pack & publish
