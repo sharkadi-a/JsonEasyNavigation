@@ -74,7 +74,7 @@ namespace JsonEasyNavigation
             }
             else if (type == typeof(bool))
             {
-                if (element.ValueKind is JsonValueKind.True or JsonValueKind.False)
+                if (element.ValueKind == JsonValueKind.True || element.ValueKind == JsonValueKind.False)
                 {
                     isSuccess = true;
                     value = BoxingSafeConverter<bool, T>.Instance.Convert(element.ValueKind == JsonValueKind.True);

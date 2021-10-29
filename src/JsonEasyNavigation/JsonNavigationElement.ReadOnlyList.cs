@@ -71,7 +71,7 @@ namespace JsonEasyNavigation
                     var c = 0;
                     IEnumerable<JsonProperty> enumerator = IsStablePropertyOrder
                         ? JsonElement.EnumerateObject().OrderBy(x => x.Name)
-                        : JsonElement.EnumerateObject();
+                        : (IEnumerable<JsonProperty>)JsonElement.EnumerateObject();
                     
                     foreach (var property in enumerator)
                     {
