@@ -71,7 +71,8 @@ namespace JsonEasyNavigation
         /// <summary>
         /// Returns true if the <see cref="JsonElement"/> can be enumerated as an array or an object.
         /// </summary>
-        public bool IsEnumerable => JsonElement.ValueKind is JsonValueKind.Array or JsonValueKind.Object;
+        public bool IsEnumerable => JsonElement.ValueKind == JsonValueKind.Array ||
+                                    JsonElement.ValueKind == JsonValueKind.Object;
         
         /// <summary>
         /// An actual <see cref="JsonElement"/> being wrapped around.

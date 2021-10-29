@@ -1,10 +1,11 @@
-![JsonEasyNavigation](./media/logo.png "Mass Transit")
+![JsonEasyNavigation](./media/logo.png "JsonEasyNavigation")
 
 ![.NET](https://github.com/sharkadi-a/JsonEasyNavigation/actions/workflows/dotnet.yml/badge.svg)
 
 # JsonEasyNavigation
 
-This library provides a wrapper class around JsonElement (located in System.Text.Json) which allows to navigate through JSON DOM (domain object model) hierarchy using indexer-style syntax (as in collections and dictionaries) for properties and array alike. It also contains useful methods to get values without throwing exceptions.
+This library provides a wrapper class around Microsoft's .NET JsonElement JsonElement (located in System.Text.Json) which allows to navigate through JSON DOM (domain object model) hierarchy using indexer-style syntax (as in collections and dictionaries) for properties and array alike. It also contains useful methods to get values without throwing exceptions. 
+Target frameworks are .NET 5 and NET Standard 2.0.
 
 Here is an example:
 
@@ -15,7 +16,7 @@ Here is an example:
             "Id": 0,
             "Name": "John",
             "SecondName": "Wick",
-            "NickName": "Baba Yaga",
+            "NickName": "Baba Yaga"
         },
         {
             "Id": 1,
@@ -41,7 +42,7 @@ var nav = jsonDocument.ToNavigation();
 
 `JsonNavigationElement` is a struct, a wrapper around JsonElement. This struct provides many useful methods to operate arrays, objects and getting values from the JsonElement inside.
 
-Now we can easly navigate Domain Object Model using indexers in a sequential style:
+Now we can easley navigate Domain Object Model using indexers in a sequential style:
 
 ```C#
 var arrayItem = nav[0]; // first item in the array
@@ -49,7 +50,7 @@ var id = arrayItem["Id"].GetInt32OrDefault(); // 0
 var nickName = arrayItem["NickName"].GetStringOrDefault(); // "Baba Yaga"
 ```
 
-Notice the usage of `GetXxxOrDefault` methods, which provides a convinient way to get values from the JsonElement without throwing exceptions. There are a lot of other similar useful methods.
+Notice the usage of `GetXxxOrDefault` methods, which provides a convenient way to get values from the JsonElement without throwing exceptions. There are a lot of other similar useful methods.
 
 We also can check if the property exist:
 
@@ -66,8 +67,8 @@ if (nav[0]["Age"].Exist)
 
 Overall, the library provides following features:
 
-* A wrapper around JsonElement incapsulating all behaviour regarding to the DOM traversial and navigation (`JsonNavigationElement`);
-* The API is implemented in a no-throw manner - you can "get" properties that don't exist in the DOM and check their existinence;
+* A wrapper around JsonElement encapsulating all behaviour regarding to the DOM traversal and navigation (`JsonNavigationElement`);
+* The API is implemented in a no-throw manner - you can "get" properties that don't exist in the DOM and check their existence;
 * Implementation of a `IReadOnlyDictionary` and `IReadOnlyCollection`;
 * Methods for converting values to the specified types in a type-safe way (and also generic methods like `TryGetValue<T>`);
 * Extensions for caching properties and persisting their order for faster and easier JSON navigation.

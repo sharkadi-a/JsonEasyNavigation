@@ -6,7 +6,7 @@ namespace JsonEasyNavigation
     // https://stackoverflow.com/questions/3343551/how-to-cast-a-value-of-generic-type-t-to-double-without-boxing
     internal sealed class BoxingSafeConverter<TIn, TOut>         
     {
-        public static readonly BoxingSafeConverter<TIn, TOut> Instance = new();
+        public static readonly BoxingSafeConverter<TIn, TOut> Instance = new BoxingSafeConverter<TIn, TOut>();
 
         public Func<TIn, TOut> Convert { get; }
 

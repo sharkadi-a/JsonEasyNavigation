@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <PackageVersion>1.0</PackageVersion>
+        <PackageVersion>1.1.0</PackageVersion>
         <PackageIcon>logo.png</PackageIcon>
         <Title>JsonEasyNavigation</Title>
         <Authors>Sharkadi Andrey</Authors>
@@ -12,17 +12,24 @@
         <PackageProjectUrl>https://github.com/sharkadi-a/JsonEasyNavigation</PackageProjectUrl>
         <PackageTags>text.json json navigation indexer dictionary list collection DOM</PackageTags>
     </PropertyGroup>
-
     <PropertyGroup>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\..\media\logo.png" Pack="true" PackagePath="\"/>
+        <None Include="..\..\media\logo.png" Pack="true" PackagePath="\" />
     </ItemGroup>
     
     <ItemGroup>
-        <None Include="..\..\LICENSE.txt" Pack="true" PackagePath=""/>
+        <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
+    </ItemGroup>    
+    
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="System.Text.Json" Version="5.0.2" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
     </ItemGroup>
     
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -32,5 +39,4 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
       <DocumentationFile>bin\Release\JsonEasyNavigation.xml</DocumentationFile>
     </PropertyGroup>
-
 </Project>

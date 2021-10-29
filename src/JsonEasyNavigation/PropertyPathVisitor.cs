@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.Json;
 
 namespace JsonEasyNavigation
@@ -14,14 +15,22 @@ namespace JsonEasyNavigation
                     return new JsonNavigationElement(jsonElement, false, false);
                 }
                 
-                var property = properties[0];
+                var property = properties.First();
                 if (jsonElement.ValueKind != JsonValueKind.Object) return default;
                 
                 if (!jsonElement.TryGetProperty(property, out var result)) return default;
 
                 jsonElement = result;
-                properties = properties[1..];
+
+                var offset = properties.Offset + 1;
+                if (offset > properties.Array.Length) break;
+                
+                properties = new ArraySegment<string>(properties.Array, 
+                    offset,
+                    properties.Count - 1);
             }
+
+            return default;
         }
     }
 }

@@ -124,9 +124,9 @@ namespace JsonEasyNavigation
 
                 if (JsonElement.ValueKind == JsonValueKind.Object)
                 {
-                    IEnumerable<JsonProperty> properties = HasCachedProperties 
-                        ? _properties.Value 
-                        : JsonElement.EnumerateObject();
+                    IEnumerable<JsonProperty> properties = HasCachedProperties
+                        ? _properties.Value
+                        : (IEnumerable<JsonProperty>)JsonElement.EnumerateObject();
                     return properties.Select(x => new JsonNavigationElement(x.Value, isStable, preCache));
                 }
                 
