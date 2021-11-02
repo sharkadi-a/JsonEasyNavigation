@@ -1,6 +1,7 @@
 ![JsonEasyNavigation](./media/logo.png "JsonEasyNavigation")
 
 ![.NET](https://github.com/sharkadi-a/JsonEasyNavigation/actions/workflows/dotnet.yml/badge.svg)
+[![nuget](https://img.shields.io/nuget/v/JsonEasyNavigation)](https://www.nuget.org/packages/JsonEasyNavigation)
 
 # JsonEasyNavigation
 
@@ -62,6 +63,10 @@ if (nav[0]["Age"].Exist)
 ```
 
 `JsonNavigationElement` does **not** throw exception if a property or array item does not exist. You can always check `Exist` property of an `JsonNavigationElement` to be sure that corresponding `JsonElement` was found.
+
+## Installation
+
+You can search nuget.org for `JsonEasyNavigation` package or download it directly from <https://www.nuget.org/packages/JsonEasyNavigation/>. See this link for more information.
 
 ## Features
 
