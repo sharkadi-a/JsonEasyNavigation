@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Buffers;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -312,7 +312,17 @@ namespace JsonEasyNavigation
         {
             return PrimitiveValueExtractor.TryGetValue(JsonElement, out T value) ? value : default;
         }
-        
+
+        /// <summary>
+        /// Maps the <see cref="JsonElement"/> and all it's descendants to the specified type. Mapping is provided by
+        /// <see cref="JsonSerializer"/> and relies on it's implementation. May throw exceptions.
+        /// </summary>
+        public T Map<T>(JsonSerializerOptions options = default)
+        {
+            // TODO: replace with Utf8JsonWriter
+            return JsonSerializer.Deserialize<T>(JsonElement.GetRawText(), options);
+        }
+
         /// <inheritdoc/>
         public bool Equals(JsonNavigationElement other)
         {
