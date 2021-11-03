@@ -64,6 +64,22 @@ if (nav[0]["Age"].Exist)
 
 `JsonNavigationElement` does **not** throw exception if a property or array item does not exist. You can always check `Exist` property of an `JsonNavigationElement` to be sure that corresponding `JsonElement` was found.
 
+It is also possible to map `JsonNavigationElement` into the object of the specific type (using JsonSerializer internally):
+
+```C#
+public class Person
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string SecondName { get; set; }
+    public string NickName { get; set; } 
+}
+
+// ...
+
+var person = nav[0].Map<Person>();
+```
+
 ## Installation
 
 You can search nuget.org for `JsonEasyNavigation` package or download it directly from <https://www.nuget.org/packages/JsonEasyNavigation/>. See this link for more information.
