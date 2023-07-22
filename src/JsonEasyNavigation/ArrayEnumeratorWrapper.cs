@@ -5,9 +5,9 @@ using System.Text.Json;
 
 namespace JsonEasyNavigation
 {
-    internal readonly struct ArrayEnumeratorWrapper : IEnumerator<JsonNavigationElement>
+    internal struct ArrayEnumeratorWrapper : IEnumerator<JsonNavigationElement>
     {
-        private readonly JsonElement.ArrayEnumerator _enumerator;
+        private JsonElement.ArrayEnumerator _enumerator;
         
         public ArrayEnumeratorWrapper(JsonElement jsonElement)
         {
