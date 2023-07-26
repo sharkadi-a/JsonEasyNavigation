@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using Shouldly;
 using Xunit;
@@ -123,5 +124,21 @@ namespace JsonEasyNavigation.Tests
 
             nav.Keys.ShouldBeEmpty();
         }
-    }
+
+		[Fact]
+		public void EnumerateArray_ShouldEnumerateItems()
+        {
+			var json = @"[ ""item1"", ""item2"", ""item3"" ]";
+
+			var jsonDocument = JsonDocument.Parse(json);
+			var nav = jsonDocument.ToNavigation();
+            
+            var list = new List<string>();
+            foreach (var item in nav)
+            {
+                list.Add(item.GetStringOrEmpty());
+            }
+            list.ShouldBe(new[] { "item1", "item2", "item3" });
+		}
+	}
 }

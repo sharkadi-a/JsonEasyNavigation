@@ -270,5 +270,37 @@ namespace JsonEasyNavigation.Tests
             var item = nav["item1"]["item3"]; 
             item.Exist.ShouldBeFalse();
         }
+
+        [Fact]
+        public void EnumerateObject_ShouldEnumerateProperties()
+        {
+            var json = @"{ ""item1"" : ""first"", ""item2"": ""second"" }";
+
+            var jsonDocument = JsonDocument.Parse(json);
+            var nav = jsonDocument.ToNavigation();
+
+            var list = new List<string>();
+            foreach (var item in nav)
+            {
+                list.Add(item.Name);
+            }
+            list.ShouldBe(new[] { "item1", "item2" });
+        }
+
+        [Fact]
+        public void EnumerateObject_CachedProperties_ShouldEnumerateProperties()
+        {
+            var json = @"{ ""item1"" : ""first"", ""item2"": ""second"" }";
+
+            var jsonDocument = JsonDocument.Parse(json);
+            var nav = jsonDocument.ToNavigation().WithCachedProperties();
+
+            var list = new List<string>();
+            foreach (var item in nav)
+            {
+                list.Add(item.Name);
+            }
+            list.ShouldBe(new[] { "item1", "item2" });
+        }
     }
 }
