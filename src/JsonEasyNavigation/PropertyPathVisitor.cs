@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text.Json;
-
-namespace JsonEasyNavigation
+﻿namespace JsonEasyNavigation
 {
     internal static class PropertyPathVisitor
     {

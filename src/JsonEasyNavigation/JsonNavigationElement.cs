@@ -1,11 +1,4 @@
-﻿using System;
-using System.Buffers;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
-using System.Threading;
-
-namespace JsonEasyNavigation
+﻿namespace JsonEasyNavigation
 {
     /// <summary>
     /// Represents a wrapper around <see cref="JsonElement"/>, which allows to navigate it's

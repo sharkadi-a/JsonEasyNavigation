@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text.Json;
-
-namespace JsonEasyNavigation
+﻿namespace JsonEasyNavigation
 {
     internal static class PrimitiveValueExtractor
     {
