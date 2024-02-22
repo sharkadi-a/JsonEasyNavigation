@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-
-namespace JsonEasyNavigation
+﻿namespace JsonEasyNavigation
 {
     public readonly partial struct JsonNavigationElement : IReadOnlyDictionary<string, JsonNavigationElement>
     {
