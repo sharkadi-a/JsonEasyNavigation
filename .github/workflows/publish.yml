@@ -21,6 +21,11 @@ jobs:
       #   with:
       #     dotnet-version: 3.1.200
 
+      - uses: 8BitJonny/gh-get-current-pr@3.0.0
+        id: PR
+        with:
+          sha: ${{ github.event.pull_request.head.sha }}
+
       # Publish
       - name: publish on version change
         id: publish_nuget
@@ -55,3 +60,4 @@ jobs:
 
           # Flag to toggle pushing symbols along with nuget package to the server, disabled by default
           # INCLUDE_SYMBOLS: false
+        if: steps.PR.outputs.pr_found != 'true'
