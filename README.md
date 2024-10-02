@@ -1,12 +1,78 @@
-![JsonEasyNavigation](./media/logo.png "JsonEasyNavigation")
+﻿# JsonEasyNavigation
+This library provides a wrapper class around JsonElement (located in System.Text.Json) which allows to navigate through JSON DOM (domain object model) hierarchy using indexer-style syntax (as in collections and dictionaries) for properties and array alike. It also contains useful methods to get values without throwing exceptions.
 
-![.NET](https://github.com/sharkadi-a/JsonEasyNavigation/actions/workflows/dotnet.yml/badge.svg)
-[![nuget](https://img.shields.io/nuget/v/JsonEasyNavigation)](https://www.nuget.org/packages/JsonEasyNavigation)
 
-# JsonEasyNavigation
+---
+
+
+<table>
+<tr>
+<th></th>
+<th>Description</th>
+</tr>
+<tr>
+<td>UPDATED:</td>
+<td>9/17/2024</td>
+</tr>
+<tr>
+<td>FRAMEWORK:</td>
+<td>netstandard2.0, netstandard2.1, net9.0</td>
+</tr>
+<tr>
+<td>LANGUAGE:</td>
+<td>[C#] preview</td>
+</tr>
+<tr>
+<td>OUTPUT TYPE:</td>
+<td>Library [API]</td>
+</tr>
+<tr>
+<td>SUPPORTS:</td>
+<td>[Visual Studio]</td>
+</tr>
+<tr>
+<td>GFX SUBSYS:</td>
+<td>[None]</td>
+</tr>
+<tr>
+<td>TAGS:</td>
+<td>[text.json json navigation indexer dictionary list collection DOM]</td>
+</tr>
+<tr>
+<td>STATUS:</td>
+<td><a href="https://github.com/Latency/JsonEasyNavigation/actions/workflows/dotnet.yml"><img src="https://github.com/Latency/JsonEasyNavigation/actions/workflows/dotnet.yml/badge.svg"></a></td>
+</tr>
+<tr>
+<td>LICENSE:</td>
+<td><a href="https://github.com/Latency/JsonEasyNavigation/blob/master/MIT-LICENSE.txt"><img src="https://img.shields.io/github/license/Latency/JsonEasyNavigation?style=plastic&logo=GitHub&logoColor=black&label=License&color=yellowgreen"></a></td>
+</tr>
+<tr>
+<td>VERSION:</td>
+<td><a href="https://github.com/Latency/JsonEasyNavigation/releases"><img src="https://img.shields.io/github/v/release/Latency/JsonEasyNavigation?include_prereleases&style=plastic&logo=GitHub&logoColor=black&label=Version&color=blue"></a></td>
+</tr>
+<!-- VERSION: 1.3.2 -->
+</table>
+
+
+![JsonEasyNavigation](media/logo.png "JsonEasyNavigation")
+
+<hr>
+
+## Navigation
+* <a href="#introduction">Introduction</a>
+* <a href="#usage">Usage</a>
+* <a href="#features">Features</a>
+* <a href="#installation">Installation</a>
+* <a href="#license">License</a>
+
+<hr>
+
+<h2><a name="introduction">Introduction</a></h2>
 
 This library provides a wrapper class around Microsoft's .NET JsonElement JsonElement (located in System.Text.Json) which allows to navigate through JSON DOM (domain object model) hierarchy using indexer-style syntax (as in collections and dictionaries) for properties and array alike. It also contains useful methods to get values without throwing exceptions. 
 Target frameworks are .NET 5 and NET Standard 2.0.
+
+<h2><a name="usage">Usage</a></h2>
 
 Here is an example:
 
@@ -80,11 +146,7 @@ public class Person
 var person = nav[0].Map<Person>();
 ```
 
-## Installation
-
-You can search nuget.org for `JsonEasyNavigation` package or download it directly from <https://www.nuget.org/packages/JsonEasyNavigation/>. See this link for more information.
-
-## Features
+<h2><a name="features">Features</a></h2>
 
 Overall, the library provides following features:
 
@@ -94,11 +156,19 @@ Overall, the library provides following features:
 * Methods for converting values to the specified types in a type-safe way (and also generic methods like `TryGetValue<T>`);
 * Extensions for caching properties and persisting their order for faster and easier JSON navigation.
 
-## Contributing
+<h2><a name="installation">Installation</a></h2>
 
-If you would like to fix some bugs and add new features (in a non-breaking manner) you are free to send pull-requests.
+This library can be installed using NuGet found [here](https://www.nuget.org/packages/JsonEasyNavigation/).
+This library can be installed using GitHub found [here](https://github.com/users/Latency/packages/nuget/package/JsonEasyNavigation).
 
-## License
+<h2><a name="license">License</a></h2>
 
-This software is distributed under the Apache License 2.0. See LICENSE.txt.
+This software is distributed under the Apache License 2.0. See [LICENSE].txt.
 
+All graphical assets are licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
+
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job.)
+
+   [Creative Commons Attribution 3.0 Unported License]: <https://creativecommons.org/licenses/by/3.0/>
+   [LICENSE]: <https://www.apache.org/licenses/LICENSE-2.0>
+   [MSDN article]: <https://msdn.microsoft.com/en-us/library/c5b8a8f9(v=vs.100).aspx>

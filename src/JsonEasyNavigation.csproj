@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net9.0</TargetFrameworks>
+		<Version>1.3.2</Version>
+		<Description>This library provides a wrapper class around JsonElement (located in System.Text.Json) which allows to navigate through JSON DOM (domain object model) hierarchy using indexer-style syntax (as in collections and dictionaries) for properties and array alike. It also contains useful methods to get values without throwing exceptions. </Description>
+		<PackageTags>text.json json navigation indexer dictionary list collection DOM</PackageTags>
+		<PackageReleaseNotes>Update target framework version for .NET 9.0</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Text.Json" Version="9.0.0-rc.1.24431.7" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="System.Text.Json" />
+	</ItemGroup>
+
+</Project>

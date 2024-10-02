@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonEasyNavigation.Tests", "Unit Tests\JsonEasyNavigation.Tests.csproj", "{5F8113CF-1160-4D4B-8E9A-20D36CD79F04}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonEasyNavigation", "src\JsonEasyNavigation.csproj", "{69BBD80C-AAEE-4E98-91E2-867F709A00E4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5F8113CF-1160-4D4B-8E9A-20D36CD79F04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F8113CF-1160-4D4B-8E9A-20D36CD79F04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F8113CF-1160-4D4B-8E9A-20D36CD79F04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F8113CF-1160-4D4B-8E9A-20D36CD79F04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69BBD80C-AAEE-4E98-91E2-867F709A00E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69BBD80C-AAEE-4E98-91E2-867F709A00E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69BBD80C-AAEE-4E98-91E2-867F709A00E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69BBD80C-AAEE-4E98-91E2-867F709A00E4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D5779526-0E6F-4772-82F5-0D41E7B0C8A1}
+	EndGlobalSection
+EndGlobal
